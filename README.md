@@ -4,3 +4,4 @@
 
 # Tech stack that i will using: Python,FastAPI/Groqcloud, SQLite simple html/js dashboard.
 
+# save it like this. Ctrl+s 

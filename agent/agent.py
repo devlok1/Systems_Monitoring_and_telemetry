@@ -1,3 +1,6 @@
+import json
+
+import requests
 import psutil
 
 import platform
@@ -72,6 +75,7 @@ def collect_processes():
 
 def collect_metrics():
     return {
+        "timestamp": time.time(),
         "system": collect_system(),
         "cpu": collect_cpu(),
         "memory": collect_memory(),
@@ -80,9 +84,14 @@ def collect_metrics():
         "processes": collect_processes(),
     }
 
-# in this function , we pass the collected mtrics in collected metrics defined at the end of the program.  
+# in the function display_metrics() && send_telemetry, 
+# we pass the collected mtrics in collected metrics 
+# defined at the end of the program.  
 
 def display_metrics(metrics):
+
+    print(f"Timestamp : {metrics['timestamp']}")
+
     print("\n--- System ---")
 
     print(f"OS:       {metrics['system']['os']}")
@@ -113,14 +122,35 @@ def display_metrics(metrics):
         )
 
 
-def run_agent(interval = 5):
+def send_telemetry(metrics):
+    try:
+        response = requests.post(
+            "http://127.0.0.1:8000/telemetry",
+            json=metrics,
+            timeout=5
+        )
+    
+        print(f"Server response:{response.json()}")
+
+    except requests.RequestException as error:
+        print(f"Failed to send telemetry: {error}")
+    
+    
+
+def run_agent(interval=5):
     while True:
         metrics = collect_metrics()
-        display_metrics(metrics)
+        #display_metrics(metrics)
+        send_telemetry(metrics)
 
         time.sleep(interval)
 
 
 if __name__ == "__main__":
+    metrics = collect_metrics()
+    # json_data = json.dumps(metrics, indent=4)
+    # print(json_data)
+    # instead we do,
     run_agent()
+
 

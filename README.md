@@ -13,15 +13,15 @@ The project consists of a monitoring agent that collects system metrics, a FastA
 # Goal
 The goal of this project is to build a lightweight monitoring and telemetry system while learning about:
 
-System-level monitoring
-HTTP APIs
-JSON
-FastAPI
-Database design
-SQL
-Frontend-to-backend communication
-Telemetry pipelines
-Distributed monitoring concepts
-Linux and Windows systems
+System-level monitoring,
+HTTP APIs,
+JSON,
+FastAPI,
+Database design,
+SQL,
+Frontend-to-backend communication,
+Telemetry pipelines,
+Distributed monitoring concepts,
+Linux and Windows systems.
 
 The project is being developed incrementally, starting with a functional MVP and gradually adding reliability, visualization, security, and multi-machine support.

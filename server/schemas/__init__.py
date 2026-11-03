@@ -1,0 +1,1 @@
+# SYSWATCH API Schemas

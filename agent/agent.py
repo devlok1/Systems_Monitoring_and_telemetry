@@ -23,17 +23,38 @@ def collect_system():
 
 
 def collect_cpu():
-    return psutil.cpu_percent(interval = 1)
+    frequency = psutil.cpu_freq()
 
+    return {
+        "percent": psutil.cpu_percent(interval=1),
+        "per_core": psutil.cpu_percent(interval=0),
+        "physical_core": psutil.cpu_count(logical=False),
+        "logical_core": psutil.cpu_count(logical=True),
+        "frequency":{
+            "current": frequency.current if frequency else None,
+            "min": frequency.min if frequency else None,
+            "max": frequency.max if frequency else None,
+            },
+        }
 
 def collect_memory():
     memory = psutil.virtual_memory()
+    swap = psutil.swap_memory()
+
     return {
         "percent": memory.percent,
         "used": memory.used,
         "available": memory.available,
         "total": memory.total,
-    }
+        "cached": getattr(memory,"cached",0),
+        "buffers": getattr(memory,"buffers",0),
+        "swap": {
+            "percent": swap.percent,
+            "used": swap.used,
+            "free": swap.free,
+            "total": swap.total,
+            }
+        }
 
 
 def collect_disk():
@@ -47,21 +68,49 @@ def collect_disk():
 
 
 def collect_network():
-    network = psutil.net_io_counters()
+    total = psutil.net_io_counters()
+    interfaces = psutil.net_if_stats()
+    addresses = psutil.net_if_addrs()
+    
+    interface_data = []
+
+    for name, stats in interfaces.items():
+        ips = []
+
+        for address in addresses.get(name, []):
+            if address.family == 2:
+                ips.append(address.address)
+                
+        interface_data.append({
+            "name": name,
+            "is_up": stats.isup,
+            "mtu": stats.mtu,
+            "addresses": ips,
+        })
+
     return {
-        "bytes_sent": network.bytes_sent,
-        "bytes_received": network.bytes_recv,
+        "bytes_sent": total.bytes_sent,
+        "bytes_received": total.bytes_recv,
+        "interfaces": interface_data,
     }
 
 
 def collect_processes():
     processes = []
 
-    for process in psutil.process_iter(["pid","name","cpu_percent","memory_percent"]):
+    for process in psutil.process_iter(["pid","name","cpu_percent","memory_percent","memory_info"]):
     # we use except in case of a process gets disappear when we're looking at them OR in case Windows deny access to certain processes.
 
         try:
-            processes.append(process.info)
+            info = process.info
+            memory_info = info.pop("memory_info",None)
+
+            info["memory_bytes"] = (
+                memory_info.rss if memory_info else 0
+            )
+
+            processes.append(info)
+
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             pass
 

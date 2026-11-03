@@ -1,11 +1,14 @@
 import sqlite3
+import json
 
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from server.database import get_connection
 
+
 app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,8 +24,8 @@ def root():
 
 @app.post("/telemetry")
 def receive_telemetry(data: dict):
-    print("\n Received telemetry:")
-    print(data)
+    #print("\n Received telemetry:")
+    #print(data)
 
     
     connection = get_connection()
@@ -31,28 +34,41 @@ def receive_telemetry(data: dict):
     cursor.execute("""
         INSERT INTO telemetry (
             hostname,
+            os,
             timestamp,
+            uptime,
             cpu_percent,
+            cpu_data,
             memory_percent,
+            memory_data,
             disk_percent,
-            bytes_sent,
-            bytes_received
+            network_data,
+            processes_data
         )
-        VALUES (?,?,?,?,?,?,?)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)
     """, (
         data["system"]["hostname"],
+        data["system"]["os"],
         data["timestamp"],
-        data["cpu"],
+        data["system"]["uptime"],
+        
+        data["cpu"]["percent"],
+        json.dumps(data["cpu"]),
+
         data["memory"]["percent"],
+        json.dumps(data["memory"]),
+
         data["disk"]["percent"],
-        data["network"]["bytes_sent"],
-        data["network"]["bytes_received"]
+        json.dumps(data["disk"]),
+
+        json.dumps(data["network"]),
+        json.dumps(data["processes"])
     ))    
 
     connection.commit()
     connection.close()
 
-    return{"status": "received"}
+    return{"status": "Telemetry received"}
 
 
 @app.get("/telemetry")
@@ -76,24 +92,25 @@ def get_telemetry():
 
     for row in rows:
         telemetry.append({
-            "id":row["id"],
-            "hostname":row["hostname"],
-            "timestamp":row["timestamp"],
-            "cpu_percent":row["cpu_percent"],
-            "memory_percent":row["memory_percent"],
-            "disk_percent":row["disk_percent"],
-            "bytes_sent":row["bytes_sent"],
-            "bytes_received":row["bytes_received"]
-            })
+            "id": row["id"],
+            "hostname": row["hostname"],
+            "os": row["os"],
+            "timestamp": row["timestamp"],
+            "uptime": row["uptime"],
+            "cpu": json.loads(row["cpu_data"]),
+            "memory": json.laods(row["memory_percent"]),
+            "disk": json.loads(row["disk_data"]),
+            "network": json.loads(row["network_data"]),
+            "processes": json.loads(row["processes_data"])
+        })
 
-    return telemetry
+    return telemtry
 
 
 @app.get("/telemetry/latest")
 def get_latest_telemtry():
     connection = get_connection()
     connection.row_factory = sqlite3.Row
-
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -107,15 +124,17 @@ def get_latest_telemtry():
     connection.close()
 
     if row is None:
-        return {"message": "No telemetry available"}
+        return {"message" : "No telemetry available"}
 
     return {
-        "id":row["id"],
-        "hostname":row["hostname"],
-        "timestamp":row["timestamp"],
-        "cpu_percent":row["cpu_percent"],
-        "memory_percent":row["memory_percent"],
-        "disk_percent":row["disk_percent"],
-        "bytes_sent":row["bytes_sent"],
-        "bytes_received":row["bytes_received"]
+        "id": row["id"],
+        "hostname": row["hostname"],
+        "os": row["os"],
+        "timestamp": row["timestamp"],
+        "uptime": row["uptime"],
+        "cpu": json.loads(row["cpu_data"]),
+        "memory": json.laods(row["memory_percent"]),
+        "disk": json.loads(row["disk_data"]),
+        "network": json.loads(row["network_data"]),
+        "processes": json.loads(row["processes_data"])
     }

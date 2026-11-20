@@ -1,6 +1,4 @@
-# ==============================================================================
 # SYSWATCH Dashboard Dockerfile (Multi-Stage Production Build)
-# ==============================================================================
 
 # Stage 1: Build React / TypeScript assets with Node.js
 FROM node:20-alpine AS builder

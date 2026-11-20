@@ -20,8 +20,18 @@ SYSWATCH solves this by providing a unified, cross-platform telemetry schema, ro
 
 ---
 
-## 3. Project Objectives
+## 3. Project Objectives & Learning Goals
 
+The primary goal of SYSWATCH is to build a lightweight, production-grade monitoring and telemetry platform while mastering:
+- **System-level monitoring:** psutil, hardware sensors, cgroups, process trees, and operating system kernels.
+- **Modern HTTP APIs:** FastAPI, Pydantic v2 schemas, streaming, pagination, and structured error handling.
+- **Telemetry Pipelines:** JSON streaming, mathematical rate calculation ($\Delta \text{Bytes} / \Delta t$), counter rollover handling, and exponential backoff retry policies.
+- **Database Engineering:** SQLite WAL mode, schema evolution without data loss, indexed temporal queries, and retention pruning.
+- **Frontend Architecture:** React 19, TypeScript, real-time polling hooks, and dark industrial SVG visualizations.
+- **Container Architecture:** Multi-stage production Docker builds, Nginx reverse proxying, and container vs. host monitoring boundaries.
+- **Cross-Platform Engineering:** Seamless single-codebase operations across Windows 10/11, Windows Server, Debian, Ubuntu, and Kali Linux.
+
+Key operational objectives:
 - **True Cross-Platform Compatibility:** Single shared Python agent capable of auto-detecting Windows and Linux without code branching or separate builds.
 - **Unified Telemetry Schema:** Identical JSON structure transmitted by both Windows and Linux agents to a unified FastAPI backend.
 - **Mathematical Accuracy:** Precise throughput calculation ($\Delta \text{Bytes} / \Delta t$) handling reboots and counter rollovers without mistaking cumulative counters for bandwidth.

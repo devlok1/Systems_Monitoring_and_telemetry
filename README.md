@@ -133,8 +133,8 @@ cp .env.example .env
 docker compose up -d --build
 
 # 3. Access dashboard in browser
-# http://localhost:3000
-
+# Dashboard (Nginx Production Build): http://localhost:3000
+# Backend API: http://localhost:8000
 # 4. (Optional) Run the containerized agent
 docker compose --profile agent up -d
 ```

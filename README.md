@@ -66,7 +66,7 @@ Key operational objectives:
                      React Dashboard
 ```
 
-Detailed architectural diagrams and component breakdowns are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+The architecture follows a clean layered design connecting native host collectors to the FastAPI backend and React frontend.
 
 ---
 
@@ -149,7 +149,7 @@ docker compose up -d --build
 docker compose --profile agent up -d
 ```
 
-For complete Docker architecture, host-versus-container monitoring options, and troubleshooting, see [docs/DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md).
+The Docker deployment provides isolated container environments with persistent SQLite volume storage.
 
 ---
 
@@ -232,8 +232,7 @@ npm run dev
 | `GET` | `/alerts` | Query active or historical alerts. |
 | `POST` | `/alerts/{id}/dismiss` | Dismiss an alert record. |
 
-Full interactive API documentation is available via Swagger UI at `http://127.0.0.1:8000/docs`.  
-Comprehensive endpoint specifications are located in [docs/API_REFERENCE.md](docs/API_REFERENCE.md).
+Full interactive API documentation is available via Swagger UI at `http://127.0.0.1:8000/docs`.
 
 ---
 
@@ -245,7 +244,7 @@ SYSWATCH stores telemetry in a centralized SQLite database using WAL mode:
 - **`alerts`**: Threshold notifications and security notices.
 - **Indexes:** `idx_telemetry_timestamp`, `idx_telemetry_host_ts`, `idx_logs_timestamp`, `idx_alerts_timestamp`.
 
-Schema definitions and migration details are documented in [docs/DATABASE_SCHEMA.md](docs/DATABASE_SCHEMA.md).
+The database is automatically initialized and migrated on backend startup.
 
 ---
 
@@ -278,18 +277,7 @@ npm run build
 
 ---
 
-## 13. Documentation Index
-
-- [System Architecture](docs/ARCHITECTURE.md)
-- [Docker Deployment Guide](docs/DOCKER_DEPLOYMENT.md)
-- [Codebase Audit & Problem Assessment](docs/CODE_AUDIT.md)
-- [API Reference Manual](docs/API_REFERENCE.md)
-- [Database Schema & Migration](docs/DATABASE_SCHEMA.md)
-- [Development Log](docs/DEVELOPMENT_LOG.md)
-
----
-
-## 14. Current Limitations & Roadmap
+## 13. Current Limitations & Roadmap
 
 - **Single-Machine Milestone:** Currently optimized for monitoring the local machine on which the agent runs. Multi-machine aggregation is ready via the `host_id` and `hostname` database schema.
 - **Hardware Temperature:** Linux exposes CPU core temperature via `/sys/class/thermal` and kernel drivers. On standard Windows consumer environments without custom WMI/ACPI thermal drivers, temperature is safely returned as `null` to avoid fabricated measurements.

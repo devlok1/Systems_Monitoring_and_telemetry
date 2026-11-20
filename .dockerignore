@@ -1,0 +1,17 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+node_modules
+dashboard/node_modules
+dashboard/dist
+.pytest_cache
+*.db
+*.db.bak
+.env
+Duplicate Home Page.zip
+Duplicate Home Page/
+docs/

@@ -96,3 +96,4 @@ Migration strategy (`server/migration.py`):
 3. Populates `network_bytes_sent` and `network_bytes_recv` indexed columns.
 4. Preserves historical timestamps and calculates ISO-8601 UTC representations.
 5. Preserves `telemetry_old.db` and backup files untouched.
+

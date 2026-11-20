@@ -32,3 +32,4 @@ def collect_cpu(sample_interval: float = 0.1) -> Dict[str, Any]:
         "frequency": freq_data,
         "temperature": get_cpu_temperature(),
     }
+

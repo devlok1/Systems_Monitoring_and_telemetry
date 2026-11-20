@@ -77,3 +77,4 @@ def collect_disk() -> Dict[str, Any]:
         "free": free_bytes,
         "partitions": partitions_data,
     }
+

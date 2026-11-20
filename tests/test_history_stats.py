@@ -61,3 +61,4 @@ def test_history_and_stats_api(client):
     assert stats["cpu"]["avg"] == 40.0
     assert stats["network"]["total_bytes_sent"] == 25000  # 35000 - 10000
     assert stats["network"]["total_bytes_received"] == 50000  # 70000 - 20000
+

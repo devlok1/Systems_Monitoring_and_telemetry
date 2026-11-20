@@ -1,0 +1,75 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: syswatch-backend:1.0.0
+    container_name: syswatch-backend
+    restart: unless-stopped
+    environment:
+      SYSWATCH_DB_PATH: ${DATABASE_PATH:-/app/data/telemetry.db}
+      DATABASE_PATH: ${DATABASE_PATH:-/app/data/telemetry.db}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      PYTHONUNBUFFERED: "1"
+    ports:
+      - "${SYSWATCH_BACKEND_PORT:-8000}:8000"
+    volumes:
+      - syswatch-data:/app/data
+    networks:
+      - syswatch-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    image: syswatch-dashboard:1.0.0
+    container_name: syswatch-dashboard
+    restart: unless-stopped
+    ports:
+      - "${SYSWATCH_DASHBOARD_PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - syswatch-net
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    image: syswatch-agent:1.0.0
+    container_name: syswatch-agent
+    profiles: ["agent"]
+    restart: unless-stopped
+    environment:
+      SYSWATCH_BACKEND_URL: ${BACKEND_URL:-http://backend:8000}
+      BACKEND_URL: ${BACKEND_URL:-http://backend:8000}
+      SYSWATCH_INTERVAL: ${COLLECTION_INTERVAL:-3.0}
+      COLLECTION_INTERVAL: ${COLLECTION_INTERVAL:-3.0}
+      PYTHONUNBUFFERED: "1"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - syswatch-net
+
+volumes:
+  syswatch-data:
+    name: syswatch-data
+
+networks:
+  syswatch-net:
+    name: syswatch-net
+    driver: bridge

@@ -141,3 +141,4 @@ def test_logs_and_alerts_endpoints(client):
     # Alerts
     al_res = client.get("/alerts")
     assert al_res.status_code == 200
+

@@ -48,3 +48,4 @@ def test_full_pipeline_collection_to_api(client):
     stats = stats_res.json()
     assert stats["sample_count"] >= 1
     assert stats["cpu"]["avg"] >= 0.0
+

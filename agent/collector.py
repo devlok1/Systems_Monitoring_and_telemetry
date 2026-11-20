@@ -49,3 +49,4 @@ def collect_system_telemetry() -> Dict[str, Any]:
         "network": net_info,
         "processes": proc_info,
     }
+

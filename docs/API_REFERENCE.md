@@ -231,3 +231,4 @@
 ### 4.4 Dismiss Alert
 - **Endpoint:** `POST /alerts/{alert_id}/dismiss`
 - **Response `200 OK`:** `{"status": "dismissed", "id": 12}`
+

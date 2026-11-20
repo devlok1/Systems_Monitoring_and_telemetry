@@ -36,3 +36,4 @@ def collect_processes(limit: int = 10) -> List[Dict[str, Any]]:
     # Sort descending by CPU utilization, secondary sort by RAM
     processes.sort(key=lambda p: (p["cpu_percent"], p["memory_percent"]), reverse=True)
     return processes[:limit]
+

@@ -124,3 +124,4 @@
 | Temperature | Handled as `None` (unsupported) | Discovered via kernel sensors | `temperature: Optional[float]` |
 | Network | Net adapters, cumulative counters | Interfaces, cumulative counters | `NetworkInterface` array |
 | Security | Safe handling of SYSTEM/Admin PIDs | Safe handling of root PIDs | Unprivileged agent mode |
+

@@ -117,3 +117,4 @@ def migrate_legacy_db(
 
 if __name__ == "__main__":
     migrate_legacy_db()
+

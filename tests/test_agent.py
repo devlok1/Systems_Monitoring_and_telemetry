@@ -77,3 +77,4 @@ def test_send_telemetry_retry_on_failure():
         result = send_telemetry({"test": 1}, endpoint_url="http://invalid.local/telemetry")
         assert result is False
         assert mock_post.call_count >= 2
+

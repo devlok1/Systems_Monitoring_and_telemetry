@@ -23,3 +23,4 @@ def collect_memory() -> Dict[str, Any]:
             "percent": round(float(swap.percent), 2),
         },
     }
+

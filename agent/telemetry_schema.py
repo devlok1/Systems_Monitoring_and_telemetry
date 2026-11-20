@@ -101,3 +101,4 @@ class TelemetryPayload(BaseModel):
                 "uptime": self.host.uptime_seconds,
                 "version": self.host.os_version,
             }
+

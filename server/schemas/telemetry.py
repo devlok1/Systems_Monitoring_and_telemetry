@@ -84,3 +84,4 @@ class AlertEntry(BaseModel):
     source: Optional[str] = None
     detail: Optional[str] = None
     dismissed: int = 0
+

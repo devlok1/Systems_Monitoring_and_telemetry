@@ -31,3 +31,4 @@ def test_temperature_safe_fallback():
     # Verify that get_cpu_temperature never raises an unhandled exception
     temp = get_cpu_temperature()
     assert temp is None or isinstance(temp, float)
+

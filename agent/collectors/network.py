@@ -56,3 +56,4 @@ def collect_network() -> Dict[str, Any]:
         "packets_received": int(total_io.packets_recv) if total_io else 0,
         "interfaces": interfaces,
     }
+

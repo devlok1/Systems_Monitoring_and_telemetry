@@ -121,9 +121,29 @@ npm install
 cd ..
 ```
 
+### 7.3 Docker Containerized Deployment (Recommended)
+
+Run the complete SYSWATCH stack (Backend + Production Nginx Dashboard) with a single command:
+
+```bash
+# 1. Create environment configuration
+cp .env.example .env
+
+# 2. Build and start backend and dashboard containers
+docker compose up -d --build
+
+# 3. Access dashboard in browser
+# http://localhost:3000
+
+# 4. (Optional) Run the containerized agent
+docker compose --profile agent up -d
+```
+
+For complete Docker architecture, host-versus-container monitoring options, and troubleshooting, see [docs/DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md).
+
 ---
 
-## 8. Startup Instructions
+## 8. Startup Instructions (Native / Bare-Metal)
 
 To run the complete SYSWATCH stack, start the three services (Backend, Agent, Dashboard) in separate terminal tabs or background sessions:
 
@@ -251,6 +271,7 @@ npm run build
 ## 13. Documentation Index
 
 - [System Architecture](docs/ARCHITECTURE.md)
+- [Docker Deployment Guide](docs/DOCKER_DEPLOYMENT.md)
 - [Codebase Audit & Problem Assessment](docs/CODE_AUDIT.md)
 - [API Reference Manual](docs/API_REFERENCE.md)
 - [Database Schema & Migration](docs/DATABASE_SCHEMA.md)

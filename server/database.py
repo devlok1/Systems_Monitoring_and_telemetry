@@ -10,7 +10,7 @@ DEFAULT_DB_PATH = Path(__file__).resolve().parent.parent / "telemetry.db"
 
 def get_db_path() -> Path:
     """Return the configured or default database path."""
-    env_path = os.environ.get("SYSWATCH_DB_PATH")
+    env_path = os.environ.get("SYSWATCH_DB_PATH") or os.environ.get("DATABASE_PATH")
     if env_path:
         return Path(env_path).resolve()
     return DEFAULT_DB_PATH

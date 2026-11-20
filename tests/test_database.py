@@ -1,6 +1,7 @@
 import sqlite3
 import tempfile
 import os
+import time
 from pathlib import Path
 from server.database import get_db, init_db, cleanup_old_records
 
@@ -36,8 +37,9 @@ def test_retention_cleanup():
         with get_db(db_path) as conn:
             cursor = conn.cursor()
             # Insert 1 recent record (1 hour ago) and 1 old record (10 days ago)
-            recent_ts = 1793700000.0
-            old_ts = 1793700000.0 - (10 * 86400)
+            now = time.time()
+            recent_ts = now - 3600.0
+            old_ts = now - (10 * 86400.0)
             cursor.execute("""
                 INSERT INTO telemetry (hostname, os, timestamp, cpu_percent)
                 VALUES ('host1', 'Linux', ?, 10.0)
@@ -59,3 +61,4 @@ def test_retention_cleanup():
     finally:
         if os.path.exists(db_path):
             os.remove(db_path)
+
